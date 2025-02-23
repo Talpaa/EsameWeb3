@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, FlatList, Text, TextInput, View, Alert, Platform, TouchableOpacity } from 'react-native';
-import * as FileSystem from 'expo-file-system'; // Importa expo-file-system per operazioni sui file
-import Icon from 'react-native-vector-icons/MaterialIcons';  // MaterialIcons è una delle opzioni
+import * as FileSystem from 'expo-file-system';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles/style';
 
 export default function App() {
@@ -31,7 +31,7 @@ export default function App() {
       } else {
         const path = FileSystem.documentDirectory + 'task.json';
         const fileExists = await FileSystem.getInfoAsync(path);
-        
+
         if (fileExists.exists) {
           const data = await FileSystem.readAsStringAsync(path);
           setTodos(JSON.parse(data));
@@ -160,12 +160,23 @@ export default function App() {
           </TouchableOpacity>
         </View>
       </View>
-      <Text
-        style={item.completed ? styles.completed : styles.todoText}
-        onPress={() => editTodo(item)}  // Testo cliccabile per la modifica
-      >
-        {item.title}
-      </Text>
+
+      {editingTodo && editingTodo.id === item.id ? (
+        // Mostra input per la modifica quando è in modalità editing
+        <TextInput
+          style={styles.input}
+          value={editedText}
+          onChangeText={setEditedText}
+          onBlur={updateTodo}  // Salva la modifica quando il campo perde il focus
+        />
+      ) : (
+        <Text
+          style={item.completed ? styles.completed : styles.todoText}
+          onPress={() => editTodo(item)}  // Abilita la modifica al click del testo
+        >
+          {item.title}
+        </Text>
+      )}
     </View>
   );
 
