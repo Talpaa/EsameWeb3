@@ -1,95 +1,79 @@
-# 📱 React Native App con Servizi REST
+# To-Do List App
 
-## 📖 Descrizione del Progetto
-Questa applicazione mobile, realizzata con React Native, si interfaccia con un backend REST realizzato ad hoc. L'app consente di visualizzare e navigare tra le risorse fornite dal backend tramite chiamate API.
+Un'applicazione di gestione delle attività (To-Do List) sviluppata in React Native. Permette di aggiungere, modificare, eliminare e segnare le attività come completate. I dati vengono memorizzati in un file JSON locale, per consentire la persistenza anche dopo la chiusura dell'app.
 
-Le principali funzionalità includono:
-- Visualizzazione dei dati recuperati tramite REST API.
-- Navigazione tra diverse schermate dell'app.
-- Interazione con il backend per operazioni CRUD (Create, Read, Update, Delete).
+## Funzionalità principali
 
----
+- **Aggiungere attività:** L'utente può aggiungere una nuova attività tramite un campo di input e un'icona per aggiungere.
+- **Modificare attività:** L'utente può modificare il testo di un'attività cliccando sull'icona di modifica accanto ad essa.
+- **Completare attività:** L'utente può segnare un'attività come completata cliccando sull'icona di check accanto all'attività. Le attività completate sono visualizzate con il testo barrato.
+- **Eliminare attività:** L'utente può eliminare un'attività cliccando sull'icona del cestino.
+- **Persistenza dei dati:** Le attività vengono salvate in un file JSON locale e caricate all'avvio dell'app. La stessa funzionalità è  implementata sia per le piattaforme mobile che per il web.
 
-## 🛠️ Requisiti
-Assicurati di avere installato:
-- [Node.js](https://nodejs.org/) (versione 18.x o superiore)
-- [Expo CLI](https://docs.expo.dev/get-started/installation/)
-- Git
-- Un emulatore Android/iOS oppure un dispositivo fisico
+## Prerequisiti
 
----
+- **Node.js**: Assicurati di avere una versione di Node.js installata. Puoi scaricarla da [nodejs.org](https://nodejs.org/).
+- **Expo CLI**: È necessario avere l'ambiente Expo configurato per sviluppare in React Native. Puoi installare Expo CLI globalmente con il comando:
 
-## 🚀 Installazione
-1. **Clona il repository:**
-```bash
-git clone https://github.com/tuo-utente/react-native-app.git
-cd react-native-app
-```
+  ```bash
+  npm install -g expo-cli
+Editor di testo: Consigliamo di utilizzare un editor di testo come Visual Studio Code.
+Istruzioni per l'installazione e l'esecuzione
 
-2. **Installa le dipendenze:**
-```bash
+
+1. Clona il repository
+bash
+Copia
+Modifica
+git clone https://github.com/tuo-username/todo-app.git
+cd todo-app
+
+
+2. Installa le dipendenze
+Dopo aver clonato il repository, installa le dipendenze necessarie:
+
+bash
+Copia
+Modifica
 npm install
-```
 
-3. **Configura l'endpoint del backend:**
-Nel file `src/config.js`, modifica l'URL del backend:
-```javascript
-export const API_URL = 'http://localhost:3000/api';
-```
 
-4. **Avvia l'app:**
-```bash
-npx expo start
-```
+3. Avvia l'applicazione
+Per eseguire l'applicazione in modalità di sviluppo, utilizza Expo. Puoi farlo con il comando:
 
-Apri l'app Expo Go sul tuo dispositivo e scansiona il codice QR o avvia l'emulatore.
+bash
+Copia
+Modifica
+expo start
+Questo comando aprirà una finestra del browser con il pannello di controllo di Expo. Da lì puoi eseguire l'app su un emulatore o su un dispositivo fisico tramite l'app Expo Go.
 
----
+4. Esegui l'app su un dispositivo
+Su dispositivi mobili (Android/iOS): Puoi eseguire l'app direttamente sul tuo dispositivo mobile scaricando l'app Expo Go e scansionando il QR code che appare nel terminale o nel browser.
 
-## 📦 Struttura del Progetto
-```bash
-.
-├── src
-│   ├── components   # Componenti UI riutilizzabili
-│   ├── screens      # Schermate principali dell'app
-│   ├── services     # Chiamate API
-│   ├── config.js    # Configurazione API
-│   └── App.js       # Entrypoint principale
-├── assets           # Immagini e risorse statiche
-├── README.md        # Documentazione del progetto
-└── package.json     # Dipendenze e script
-```
+Su un emulatore: Puoi anche eseguire l'app su un emulatore Android o iOS configurato con Expo.
 
----
+Struttura del progetto
+-App.js: Contiene la logica principale dell'applicazione, inclusa la gestione delle attività (aggiungi, modifica, elimina, completa).
 
-## 🌐 Backend REST
-Il backend è stato realizzato utilizzando Node.js e Express. Per avviarlo:
-1. Spostati nella cartella del backend:
-```bash
-cd ../backend
-```
-2. Installa le dipendenze:
-```bash
-npm install
-```
-3. Avvia il server:
-```bash
-npm start
-```
-Il server sarà disponibile su `http://localhost:3000`.
+-styles/style.js: Contiene i fogli di stile dell'app.
 
----
+-package.json: Gestisce le dipendenze e gli script di progetto.
 
-## 🤝 Contributi
-Sentiti libero di aprire una pull request o segnalare un problema tramite le issues di GitHub.
+-task.json (solo su dispositivi mobili): File JSON che contiene la lista delle attività salvate.
 
----
+Dipendenze
+L'app utilizza le seguenti dipendenze:
 
-## ⚖️ Licenza
-Questo progetto è distribuito sotto la licenza MIT. Consulta il file `LICENSE` per ulteriori dettagli.
+react-native: Per lo sviluppo mobile.
+expo: Per la gestione e l'esecuzione dell'applicazione in ambiente di sviluppo.
+react-native-vector-icons: Per le icone delle azioni (aggiungi, modifica, elimina, completa).
+expo-file-system: Per la gestione del file system su dispositivi mobili e la lettura/scrittura del file JSON.
+Contribuire
+Se desideri contribuire a questo progetto, sentiti libero di fare una fork, creare una branch, apportare le tue modifiche e inviare una pull request.
 
----
+Licenza
+Questo progetto è concesso in licenza sotto la Licenza MIT - vedi il file LICENSE per i dettagli.
 
-## 📧 Contatti
-Per qualsiasi domanda o suggerimento, contattami via email: `tuaemail@example.com`
-
+markdown
+Copia
+Modifica
