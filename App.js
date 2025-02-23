@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, FlatList, Text, TextInput, View, Alert, Platform, TouchableOpacity } from 'react-native';
-import * as FileSystem from 'expo-file-system';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles/style';
 
@@ -11,81 +10,66 @@ export default function App() {
   const [editedText, setEditedText] = useState(''); // Testo modificato della task
 
   useEffect(() => {
-    fetchTodos();
+    fetchTodos();  // Carica i task dal backend quando il componente è montato
   }, []);
 
-  // Carica i task dal file JSON locale
+  // Carica i task dal backend tramite API
   const fetchTodos = async () => {
     try {
-      if (Platform.OS === 'web') {
-        const storedTodos = localStorage.getItem('todos');
-        if (storedTodos) {
-          setTodos(JSON.parse(storedTodos));
-        } else {
-          const defaultTodos = [
-            { id: 1, title: "Comprare il latte", completed: false }
-          ];
-          localStorage.setItem('todos', JSON.stringify(defaultTodos));
-          setTodos(defaultTodos);
-        }
+      const response = await fetch('http://localhost:3000/api/data');
+      const json = await response.json();
+      if (json.data) {
+        setTodos(json.data);
       } else {
-        const path = FileSystem.documentDirectory + 'task.json';
-        const fileExists = await FileSystem.getInfoAsync(path);
-
-        if (fileExists.exists) {
-          const data = await FileSystem.readAsStringAsync(path);
-          setTodos(JSON.parse(data));
-        } else {
-          const defaultTodos = [
-            { id: 1, title: "Comprare il latte", completed: false }
-          ];
-          await FileSystem.writeAsStringAsync(path, JSON.stringify(defaultTodos));
-          setTodos(defaultTodos);
-        }
+        Alert.alert('Errore', 'Impossibile recuperare le attività.');
       }
     } catch (error) {
       Alert.alert('Errore', 'Impossibile recuperare le attività.');
     }
   };
 
-  // Aggiungi un nuovo task e salvalo nel file JSON
+  // Aggiungi un nuovo task tramite API
   const addTodo = async () => {
     if (!newTodo.trim()) return;
-    const newTask = { id: Date.now(), title: newTodo, completed: false };
-    const updatedTodos = [...todos, newTask];
-    setTodos(updatedTodos);
+    const newTask = { title: newTodo };
 
     try {
-      if (Platform.OS === 'web') {
-        localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      const response = await fetch('http://localhost:3000/api/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newTask),
+      });
+      const json = await response.json();
+      if (json.data) {
+        setTodos(json.data);
+        setNewTodo('');
       } else {
-        const path = FileSystem.documentDirectory + 'task.json';
-        await FileSystem.writeAsStringAsync(path, JSON.stringify(updatedTodos));
+        Alert.alert('Errore', 'Impossibile aggiungere l\'attività.');
       }
     } catch (error) {
       Alert.alert('Errore', 'Impossibile aggiungere l\'attività.');
     }
-
-    setNewTodo('');
   };
 
   // Modifica una task
   const updateTodo = async () => {
     if (!editedText.trim()) return;
 
-    const updatedTodos = todos.map(todo =>
-      todo.id === editingTodo.id ? { ...todo, title: editedText } : todo
-    );
-    setTodos(updatedTodos);
-    setEditingTodo(null);
-    setEditedText('');
+    const updatedTodo = { title: editedText };
 
     try {
-      if (Platform.OS === 'web') {
-        localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      const response = await fetch(`http://localhost:3000/api/data/${editingTodo.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedTodo),
+      });
+      const json = await response.json();
+      if (json.data) {
+        setTodos(json.data);
+        setEditingTodo(null);
+        setEditedText('');
       } else {
-        const path = FileSystem.documentDirectory + 'task.json';
-        await FileSystem.writeAsStringAsync(path, JSON.stringify(updatedTodos));
+        Alert.alert('Errore', 'Impossibile aggiornare l\'attività.');
       }
     } catch (error) {
       Alert.alert('Errore', 'Impossibile aggiornare l\'attività.');
@@ -94,34 +78,37 @@ export default function App() {
 
   // Modifica lo stato del task (completato / non completato)
   const toggleTodo = async (id, completed) => {
-    const updatedTodos = todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !completed } : todo
-    );
-    setTodos(updatedTodos);
+    // Invertiamo lo stato di completed senza toccare il titolo
+    const updatedTodo = { completed: !completed }; // Solo il campo "completed" viene modificato
 
     try {
-      if (Platform.OS === 'web') {
-        localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      const response = await fetch(`http://localhost:3000/api/data/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedTodo), // Invia solo il campo "completed"
+      });
+      const json = await response.json();
+      if (json.data) {
+        setTodos(json.data); // Aggiorna la lista con i task aggiornati
       } else {
-        const path = FileSystem.documentDirectory + 'task.json';
-        await FileSystem.writeAsStringAsync(path, JSON.stringify(updatedTodos));
+        Alert.alert('Errore', 'Impossibile aggiornare lo stato dell\'attività.');
       }
     } catch (error) {
-      Alert.alert('Errore', 'Impossibile aggiornare l\'attività.');
+      Alert.alert('Errore', 'Impossibile aggiornare lo stato dell\'attività.');
     }
   };
 
-  // Elimina un task e aggiorna il file JSON
+  // Elimina un task tramite API
   const deleteTodo = async (id) => {
-    const updatedTodos = todos.filter(todo => todo.id !== id);
-    setTodos(updatedTodos);
-
     try {
-      if (Platform.OS === 'web') {
-        localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      const response = await fetch(`http://localhost:3000/api/data/${id}`, {
+        method: 'DELETE',
+      });
+      const json = await response.json();
+      if (json.data) {
+        setTodos(json.data);
       } else {
-        const path = FileSystem.documentDirectory + 'task.json';
-        await FileSystem.writeAsStringAsync(path, JSON.stringify(updatedTodos));
+        Alert.alert('Errore', 'Impossibile eliminare l\'attività.');
       }
     } catch (error) {
       Alert.alert('Errore', 'Impossibile eliminare l\'attività.');
@@ -141,18 +128,20 @@ export default function App() {
         <View style={styles.buttonWrapper}>
           <TouchableOpacity onPress={() => toggleTodo(item.id, item.completed)}>
             <Icon
-              name={item.completed ? "restore" : "check-circle"}
+              name={item.completed ? "restore" : "check-circle"} // Cambia icona a seconda dello stato
               size={30}
-              color={item.completed ? "gray" : "green"}
+              color={item.completed ? "gray" : "green"} // Cambia colore a seconda dello stato
             />
           </TouchableOpacity>
         </View>
+
         {/* Bottone "Elimina" con icona del cestino */}
         <View style={styles.buttonWrapper}>
           <TouchableOpacity onPress={() => deleteTodo(item.id)}>
             <Icon name="delete" size={30} color="red" />
           </TouchableOpacity>
         </View>
+
         {/* Bottone "Modifica" con icona della matita */}
         <View style={styles.buttonWrapper}>
           <TouchableOpacity onPress={() => editTodo(item)}>
