@@ -73,7 +73,3 @@ Se desideri contribuire a questo progetto, sentiti libero di fare una fork, crea
 
 Licenza
 Questo progetto è concesso in licenza sotto la Licenza MIT - vedi il file LICENSE per i dettagli.
-
-markdown
-Copia
-Modifica
