@@ -12,66 +12,54 @@ export default StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center', // Centra verticalmente
+    marginBottom: 20,
+  },
   input: {
     height: 40,
     borderColor: '#ccc',
     borderWidth: 1,
-    marginBottom: 10,
     paddingHorizontal: 10,
     borderRadius: 5,
+    flex: 1,
+  },
+  addButton: {
+    marginLeft: 10,
+    justifyContent: 'center', // Centra verticalmente il pulsante
+    alignItems: 'center',
+    height: 40,
   },
   todoItem: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',  // Allinea tutto a sinistra
-    alignItems: 'center',  // Centra verticalmente le icone con il testo
+    alignItems: 'center',
     padding: 10,
     backgroundColor: '#fff',
     marginBottom: 5,
     borderRadius: 5,
-    elevation: 2,  // Aggiunge l'ombra su Android
+    elevation: 2,
   },
   todoText: {
     fontSize: 16,
-    flex: 1,  // Fai sì che il testo prenda tutto lo spazio disponibile
-    marginLeft: 10,  // Distanza tra l'icona e il testo
+    flex: 1,
+    marginLeft: 10,
+    paddingRight: 10,
+    lineHeight: 22,
   },
   completed: {
     fontSize: 16,
     textDecorationLine: 'line-through',
     color: 'gray',
-    flex: 1,  // Fai sì che il testo prenda tutto lo spazio disponibile
-    marginLeft: 10,  // Distanza tra l'icona e il testo
+    flex: 1,
+    marginLeft: 10,
+    lineHeight: 22,
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   buttonWrapper: {
-    marginHorizontal: 5,  // Distanza ridotta tra le icone
+    marginHorizontal: 5,
   },
-  editButtonWrapper: {
-    marginRight: 5, // Riduci la distanza solo per il tasto modifica
-  },
-  todoTextWithIcons: {
-    marginLeft: 10,  // Spazio tra le icone e il testo
-  },
-  inputContainer: {
-    flexDirection: 'row', // Impostiamo il layout orizzontale
-    alignItems: 'center',
-    marginBottom: 20, // Spazio tra l'input e la lista
-  },
-  input: {
-  height: 40,
-  borderColor: '#ccc',
-  borderWidth: 1,
-  marginBottom: 10,
-  paddingHorizontal: 10,
-  borderRadius: 5,
-  flex: 1,  // Aggiungi questa riga per fare in modo che l'input prenda tutta la larghezza disponibile
-},
-addButton: {
-  marginLeft: 10, // Distanza tra l'input e l'icona
-  marginBottom: 10, // Distanza tra l'icona e il pulsante
-}
 });
